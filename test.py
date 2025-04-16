@@ -4,16 +4,13 @@ import requests
 
 app = FastAPI()
 
-# Common request schema
 class AgentRequest(BaseModel):
-    provider: str  # 'vapi' or 'retell'
+    provider: str 
     name: str
     description: str
     voice_id: str
     instructions: str
-    # You can add more standardized fields here
 
-# Helper functions to convert standard params to provider-specific formats
 def create_vapi_agent(data: AgentRequest):
     url = "https://api.vapi.ai/assistants"
     payload = {
@@ -44,7 +41,6 @@ def create_retell_agent(data: AgentRequest):
     response = requests.post(url, json=payload, headers=headers)
     return response.json()
 
-# Unified endpoint
 @app.post("/create-agent")
 def create_agent(agent: AgentRequest):
     if agent.provider.lower() == 'vapi':
